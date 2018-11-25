@@ -1,17 +1,16 @@
-package customer;
+package admin;
 
 import java.sql.*;
 import util.DBConnection;
 
-public class CustomerDB {
-
-	private static CustomerDB instance = new CustomerDB();
+public class AdminDB {
+	private static AdminDB instance = new AdminDB();
 	
-	public static CustomerDB getInstance() {
+	public static AdminDB getInstance() {
 		return instance;
 	}
 	
-	public void insertCustomer(CustomerBean customer) throws Exception {
+	public void insertAdmin(String id, String password) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
@@ -19,13 +18,9 @@ public class CustomerDB {
 			conn = DBConnection.getConnection();
 			
 			pstmt = conn.prepareStatement(
-					"insert into CUSTOMER values (?, ?, ?, ?, ?, ?, 0)");
-			pstmt.setString(1, customer.getId());
-			pstmt.setString(2, customer.getPassword());
-			pstmt.setString(3, customer.getName());
-			pstmt.setTimestamp(4, customer.getDate_of_birth());
-			pstmt.setString(5, customer.getAddress());
-			pstmt.setString(6, customer.getPhone_number());
+					"insert into ADMIN values (?, ?)");
+			pstmt.setString(1, id);
+			pstmt.setString(2, password);
 			pstmt.executeUpdate();
 		} catch(Exception ex) {
 			ex.printStackTrace();
@@ -35,7 +30,7 @@ public class CustomerDB {
 		}
 	}
 	
-	public boolean selectCustomerByIdAndPw(String id, String password) throws Exception {
+	public boolean selectAdminByIdAndPw(String id, String password) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -45,7 +40,7 @@ public class CustomerDB {
 			conn = DBConnection.getConnection();
 			
 			pstmt = conn.prepareStatement(
-					"select * from CUSTOMER WHERE customer_id = ? and password = ?");
+					"select * from ADMIN WHERE admin_id = ? and password = ?");
 			pstmt.setString(1, id);
 			pstmt.setString(2, password);
 			rs = pstmt.executeQuery();
@@ -62,5 +57,5 @@ public class CustomerDB {
 		
 		return isCorrected;
 	}
-	
+
 }
