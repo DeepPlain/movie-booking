@@ -11,6 +11,7 @@
 <%
 	CustomerDB customerDB = CustomerDB.getInstance();
 	customerDB.insertCustomer(customer);
+	
 %>
 
 <jsp:getProperty property="id" name="customer"/>님 회원가입을 축하합니다.
