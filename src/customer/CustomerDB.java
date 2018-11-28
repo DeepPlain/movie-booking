@@ -11,9 +11,10 @@ public class CustomerDB {
 		return instance;
 	}
 	
-	public void insertCustomer(CustomerBean customer) throws Exception {
+	public int insertCustomer(CustomerBean customer) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
+		int isCompleted = 0;
 		
 		try {
 			conn = DBConnection.getConnection();
@@ -26,20 +27,23 @@ public class CustomerDB {
 			pstmt.setTimestamp(4, customer.getDate_of_birth());
 			pstmt.setString(5, customer.getAddress());
 			pstmt.setString(6, customer.getPhone_number());
-			pstmt.executeUpdate();
+			isCompleted = pstmt.executeUpdate();
+			
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		} finally {
 			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
 			if(conn != null) try {conn.close();} catch(SQLException ex) {}
 		}
+		
+		return isCompleted;
 	}
 	
-	public boolean selectCustomerByIdAndPw(String id, String password) throws Exception {
+	public int selectCustomerByIdAndPw(String id, String password) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		boolean isCorrected = false;
+		int isCorrected = 0;
 		
 		try {
 			conn = DBConnection.getConnection();
@@ -50,7 +54,7 @@ public class CustomerDB {
 			pstmt.setString(2, password);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				isCorrected = true;
+				isCorrected = 1;
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace();

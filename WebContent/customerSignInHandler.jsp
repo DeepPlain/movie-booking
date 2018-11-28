@@ -9,8 +9,8 @@
 
 <%
  	CustomerDB customerDB = CustomerDB.getInstance();
-	boolean isCorrected = customerDB.selectCustomerByIdAndPw(customer.getId(), customer.getPassword());
-	if(isCorrected) {
+	int isCompleted = customerDB.selectCustomerByIdAndPw(customer.getId(), customer.getPassword());
+	if(isCompleted == 1) {
 		session.setAttribute("type", "customer");
 		session.setAttribute("id", customer.getId());
 		response.sendRedirect("customerMenu.jsp");

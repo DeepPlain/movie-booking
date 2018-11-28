@@ -10,31 +10,35 @@ public class AdminDB {
 		return instance;
 	}
 	
-	public void insertAdmin(String id, String password) throws Exception {
+	public int insertAdmin(AdminBean admin) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
+		int isCompleted = 0;
 		
 		try {
 			conn = DBConnection.getConnection();
 			
 			pstmt = conn.prepareStatement(
 					"insert into ADMIN values (?, ?)");
-			pstmt.setString(1, id);
-			pstmt.setString(2, password);
-			pstmt.executeUpdate();
+			pstmt.setString(1, admin.getId());
+			pstmt.setString(2, admin.getPassword());
+			isCompleted = pstmt.executeUpdate();
+			
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		} finally {
 			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
 			if(conn != null) try {conn.close();} catch(SQLException ex) {}
 		}
+		
+		return isCompleted;
 	}
 	
-	public boolean selectAdminByIdAndPw(String id, String password) throws Exception {
+	public int selectAdminByIdAndPw(String id, String password) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		boolean isCorrected = false;
+		int isCompleted = 0;
 		
 		try {
 			conn = DBConnection.getConnection();
@@ -45,7 +49,7 @@ public class AdminDB {
 			pstmt.setString(2, password);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				isCorrected = true;
+				isCompleted = 1;
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace();
@@ -55,7 +59,7 @@ public class AdminDB {
 			if(conn != null) try {conn.close();} catch(SQLException ex) {}
 		}
 		
-		return isCorrected;
+		return isCompleted;
 	}
 
 }

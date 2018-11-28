@@ -15,8 +15,21 @@
 
 <%
  	CustomerDB customerDB = CustomerDB.getInstance();
-	customerDB.insertCustomer(customer);
+	int isCompleted = customerDB.insertCustomer(customer);
+	if(isCompleted == 1) {
 %>
-
-
-<jsp:getProperty property="id" name="customer"/>님 회원가입을 축하합니다.
+		<script>
+		alert("회원가입이 완료되었습니다.");
+		location.href = "customerSignIn.jsp";
+		</script>
+<% 
+	}
+	else {
+%>
+		<script>
+		alert("중복된 아이디가 이미 있거나 오류가 발생했습니다.");
+		history.go(-1);
+		</script>
+<% 
+	}
+%>

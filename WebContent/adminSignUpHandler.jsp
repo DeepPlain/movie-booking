@@ -4,12 +4,27 @@
 
 <% request.setCharacterEncoding("utf-8"); %>
 
+<jsp:useBean id="admin" class="admin.AdminBean" />
+<jsp:setProperty name="admin" property="id" value="<%=request.getParameter(\"id\") %>" />
+<jsp:setProperty name="admin" property="password" value="<%=request.getParameter(\"password\") %>" />
+
 <%
  	AdminDB adminDB = AdminDB.getInstance();
-	String id = request.getParameter("id");
-	String password = request.getParameter("password");
-	adminDB.insertAdmin(id, password);
+	int isCompleted = adminDB.insertAdmin(admin);
+	if(isCompleted == 1) {
 %>
-
-
-<%=id %>님 회원가입을 축하합니다.
+		<script>
+		alert("관리자 등록이 완료되었습니다.");
+		location.href = "adminMenu.jsp";
+		</script>
+<% 
+	}
+	else {
+%>
+		<script>
+		alert("중복된 아이디가 이미 있거나 오류가 발생했습니다.");
+		history.go(-1);
+		</script>
+<% 
+	}
+%>

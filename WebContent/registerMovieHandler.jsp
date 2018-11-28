@@ -10,8 +10,8 @@
 <%
 	String actor[] = request.getParameterValues("actor");
 	MovieDB movieDB = MovieDB.getInstance();
-	boolean isCompleted = movieDB.insertMovie(movie, actor);
-	if(isCompleted) {
+	int isCompleted = movieDB.insertMovie(movie, actor);
+	if(isCompleted == 1) {
 %>
 		<script>
 		alert("등록이 완료되었습니다.");

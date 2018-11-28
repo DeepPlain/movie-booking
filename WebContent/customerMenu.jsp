@@ -1,17 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-	String type = (String)session.getAttribute("type");
-	String id = (String)session.getAttribute("id");
-	if(type != "customer" || id == null || id.equals("")) {
-%>
-		<script>
-		alert("로그인이 필요합니다.");
-		location.href="home.jsp";
-		</script>
-<%
-	}
-%>
+
+<jsp:include page="customerSessionCheck.jsp" flush="false"/>
 
 <!DOCTYPE html>
 <html>
@@ -20,7 +10,7 @@
 <title>Customer Menu</title>
 </head>
 <body>
-	<b><%=id %></b>님 환영합니다.
+	<b><%=session.getAttribute("id") %></b>님 환영합니다.
 	<form method="post" action="logOut.jsp">
 		<input type="button" value="정보 수정" onClick="location.href='adminSignUp.jsp'">
 		<input type="button" value="회원 탈퇴" onClick="location.href='adminSignUp.jsp'">

@@ -11,7 +11,7 @@
 		아이디 : <input type="text" name="id" maxlength="20"><br/>
 		비밀번호 : <input type="password" name="password" maxlength="20"><br/>
 		<input type="submit" value="로그인">
-		<input type="button" value="회원가입" onClick="location.href='signUp.jsp'">
+		<input type="button" value="회원가입" onClick="location.href='customerSignUp.jsp'">
 	</form>
 </body>
 </html>

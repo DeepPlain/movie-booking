@@ -4,14 +4,15 @@
 
 <% request.setCharacterEncoding("utf-8"); %>
 
+<jsp:useBean id="admin" class="admin.AdminBean" />
+<jsp:setProperty name="admin" property="*" />
+
 <%
  	AdminDB adminDB = AdminDB.getInstance();
-	String id = request.getParameter("id");
-	String password = request.getParameter("password");
-	boolean isCorrected = adminDB.selectAdminByIdAndPw(id, password);
-	if(isCorrected) {
+	int isCompleted = adminDB.selectAdminByIdAndPw(admin.getId(), admin.getPassword());
+	if(isCompleted == 1) {
 		session.setAttribute("type", "admin");
-		session.setAttribute("id", id);
+		session.setAttribute("id", admin.getId());
 		response.sendRedirect("adminMenu.jsp");
 	}
 	else {

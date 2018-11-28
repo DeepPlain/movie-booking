@@ -11,10 +11,11 @@ public class MovieDB {
 		return instance;
 	}
 	
-	public boolean insertMovie(MovieBean movie, String actor[]) throws Exception {
+	public int insertMovie(MovieBean movie, String actor[]) throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
+		int isCompleted = 0;
 		int movie_id = 0;
 		
 		try {
@@ -29,7 +30,7 @@ public class MovieDB {
 			String sql = "insert into MOVIE (title, director, rating, key_information) "
 					+ "values ('" + title + "', '" + director + "', '" + rating + "', '" + key_information + "')";
 			
-			stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS); // movie_id 반환 설정
+			isCompleted = stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS); // movie_id 반환 설정
 			rs = stmt.getGeneratedKeys();
 			
 			if(rs.next()) movie_id = rs.getInt(1);
@@ -37,20 +38,21 @@ public class MovieDB {
 			if(movie_id != 0) { // actor 삽입
 				for(int i=0; i<actor.length; i++) {
 					sql = "insert into ACTOR values ('" + movie_id + "', '" + actor[i] + "')";
-					stmt.executeUpdate(sql);
+					isCompleted = stmt.executeUpdate(sql);
 				}
 			}
 			conn.commit(); // 모든 sql문 완료되면 커밋
 			conn.setAutoCommit(true); // 트랜잭션
-			return true;
+			
 		} catch(Exception ex) {
 			ex.printStackTrace();
 			conn.rollback(); // 에러 시 롤백
-			return false;
 		} finally {
 			if(stmt != null) try {stmt.close();} catch(SQLException ex) {}
 			if(conn != null) try {conn.close();} catch(SQLException ex) {}
 		}
+		
+		return isCompleted;
 	}
 
 }
