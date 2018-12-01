@@ -13,7 +13,7 @@
 	if(isCompleted == 1) {
 		session.setAttribute("type", "admin");
 		session.setAttribute("id", admin.getId());
-		response.sendRedirect("adminMenu.jsp");
+		response.sendRedirect("menu.jsp");
 	}
 	else {
 %>

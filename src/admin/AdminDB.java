@@ -19,13 +19,14 @@ public class AdminDB {
 			conn = DBConnection.getConnection();
 			
 			pstmt = conn.prepareStatement(
-					"insert into ADMIN values (?, ?)");
+					"INSERT INTO ADMIN VALUES (?, ?)");
 			pstmt.setString(1, admin.getId());
 			pstmt.setString(2, admin.getPassword());
 			isCompleted = pstmt.executeUpdate();
 			
 		} catch(Exception ex) {
 			ex.printStackTrace();
+			return 0;
 		} finally {
 			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
 			if(conn != null) try {conn.close();} catch(SQLException ex) {}
@@ -44,7 +45,7 @@ public class AdminDB {
 			conn = DBConnection.getConnection();
 			
 			pstmt = conn.prepareStatement(
-					"select * from ADMIN WHERE admin_id = ? and password = ?");
+					"SELECT * FROM ADMIN WHERE admin_id = ? AND password = ?");
 			pstmt.setString(1, id);
 			pstmt.setString(2, password);
 			rs = pstmt.executeQuery();
@@ -53,6 +54,7 @@ public class AdminDB {
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace();
+			return 0;
 		} finally {
 			if(rs != null) try {rs.close();} catch(SQLException ex) {}
 			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}

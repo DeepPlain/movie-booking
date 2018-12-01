@@ -3,11 +3,11 @@
 <%
 	String type = (String)session.getAttribute("type");
 	String id = (String)session.getAttribute("id");
-	if(type != "admin" || id == null || id.equals("")) {
+	if(type != "customer" || id == null || id.equals("")) {
 %>
 		<script>
 		alert("로그인이 필요합니다.");
-		location.href="home.jsp";
+		location.href="../home.jsp";
 		</script>
 <%
 	}

@@ -8,14 +8,13 @@
 <jsp:setProperty name="movie" property="*" />
 
 <%
-	String actor[] = request.getParameterValues("actor");
 	MovieDB movieDB = MovieDB.getInstance();
-	int isCompleted = movieDB.insertMovie(movie, actor);
+	int isCompleted = movieDB.insertMovie(movie);
 	if(isCompleted == 1) {
 %>
 		<script>
 		alert("등록이 완료되었습니다.");
-		location.href = "adminMenu.jsp";
+		location.href = "movieList.jsp";
 		</script>
 <% 
 	}
@@ -23,7 +22,7 @@
 %>
 		<script>
 		alert("오류가 발생했습니다.");
-		location.href = "adminMenu.jsp";
+		location.href = "menu.jsp";
 		</script>
 <% 		
 	}

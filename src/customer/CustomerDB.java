@@ -20,7 +20,7 @@ public class CustomerDB {
 			conn = DBConnection.getConnection();
 			
 			pstmt = conn.prepareStatement(
-					"insert into CUSTOMER values (?, ?, ?, ?, ?, ?, 0)");
+					"INSERT INTO CUSTOMER VALUES (?, ?, ?, ?, ?, ?, 0)");
 			pstmt.setString(1, customer.getId());
 			pstmt.setString(2, customer.getPassword());
 			pstmt.setString(3, customer.getName());
@@ -31,6 +31,7 @@ public class CustomerDB {
 			
 		} catch(Exception ex) {
 			ex.printStackTrace();
+			return 0;
 		} finally {
 			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
 			if(conn != null) try {conn.close();} catch(SQLException ex) {}
@@ -43,28 +44,29 @@ public class CustomerDB {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		int isCorrected = 0;
+		int isCompleted = 0;
 		
 		try {
 			conn = DBConnection.getConnection();
 			
 			pstmt = conn.prepareStatement(
-					"select * from CUSTOMER WHERE customer_id = ? and password = ?");
+					"SELECT * FROM CUSTOMER WHERE customer_id = ? AND password = ?");
 			pstmt.setString(1, id);
 			pstmt.setString(2, password);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				isCorrected = 1;
+				isCompleted = 1;
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace();
+			return 0;
 		} finally {
 			if(rs != null) try {rs.close();} catch(SQLException ex) {}
 			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
 			if(conn != null) try {conn.close();} catch(SQLException ex) {}
 		}
 		
-		return isCorrected;
+		return isCompleted;
 	}
 	
 }

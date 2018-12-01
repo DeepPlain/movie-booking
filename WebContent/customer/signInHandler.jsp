@@ -13,7 +13,7 @@
 	if(isCompleted == 1) {
 		session.setAttribute("type", "customer");
 		session.setAttribute("id", customer.getId());
-		response.sendRedirect("customerMenu.jsp");
+		response.sendRedirect("menu.jsp");
 	}
 	else {
 %>

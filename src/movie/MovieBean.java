@@ -1,11 +1,19 @@
 package movie;
 
 public class MovieBean {
+	private int movie_id;
 	private String title;
 	private String director;
 	private String rating;
 	private String key_information;
+	private String[] actor;
 	
+	public int getMovie_id() {
+		return movie_id;
+	}
+	public void setMovie_id(int movie_id) {
+		this.movie_id = movie_id;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -30,4 +38,12 @@ public class MovieBean {
 	public void setKey_information(String key_information) {
 		this.key_information = key_information;
 	}
+	public String[] getActor() {
+		return actor;
+	}
+	public void setActor(String[] actor) {
+		this.actor = actor;
+	}
 }
+
+

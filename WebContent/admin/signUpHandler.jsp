@@ -15,7 +15,7 @@
 %>
 		<script>
 		alert("관리자 등록이 완료되었습니다.");
-		location.href = "adminMenu.jsp";
+		location.href = "menu.jsp";
 		</script>
 <% 
 	}

@@ -4,10 +4,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>HOME</title>
+<title>Home</title>
 </head>
 <body>
-	<input type="button" value="관리자" onClick="location.href='adminSignIn.jsp'">
-	<input type="button" value="고객" onClick="location.href='customerSignIn.jsp'">
+	<button type="button" onclick="location.href='admin/signIn.jsp'">관리자</button>
+	<button type="button" onclick="location.href='customer/signIn.jsp'">고객</button>
 </body>
 </html>
