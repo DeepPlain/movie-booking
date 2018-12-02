@@ -12,6 +12,42 @@ public class MovieDB {
 		return instance;
 	}
 	
+	public ArrayList<MovieBean> selectMovieList() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ArrayList<MovieBean> movieBeans = new ArrayList<MovieBean>();
+		
+		try {
+			conn = DBConnection.getConnection();
+			
+			pstmt = conn.prepareStatement(
+					"SELECT *, group_concat(name) AS actor FROM MOVIE LEFT JOIN ACTOR "
+					+ "ON MOVIE.movie_id = ACTOR.movie_id "
+					+ "GROUP BY MOVIE.movie_id");
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				MovieBean movieBean = new MovieBean();
+				movieBean.setMovie_id(rs.getInt("movie_id"));
+				movieBean.setTitle(rs.getString("title"));
+				movieBean.setDirector(rs.getString("director"));
+				movieBean.setRating(rs.getString("rating"));
+				movieBean.setKey_information(rs.getString("key_information"));
+				movieBean.setActor(rs.getString("actor").split(","));
+				movieBeans.add(movieBean);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if(rs != null) try {rs.close();} catch(SQLException ex) {}
+			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
+			if(conn != null) try {conn.close();} catch(SQLException ex) {}
+		}
+		
+		return movieBeans;
+	}
+	
 	public int insertMovie(MovieBean movie) throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
@@ -59,41 +95,6 @@ public class MovieDB {
 		return isCompleted;
 	}
 	
-	public ArrayList<MovieBean> selectMovieList() {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		ArrayList<MovieBean> movieBeans = new ArrayList<MovieBean>();
-		
-		try {
-			conn = DBConnection.getConnection();
-			
-			pstmt = conn.prepareStatement(
-					"SELECT *, group_concat(name) AS actor FROM MOVIE LEFT JOIN ACTOR "
-					+ "ON MOVIE.movie_id = ACTOR.movie_id "
-					+ "GROUP BY MOVIE.movie_id");
-			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				MovieBean movieBean = new MovieBean();
-				movieBean.setMovie_id(rs.getInt("movie_id"));
-				movieBean.setTitle(rs.getString("title"));
-				movieBean.setDirector(rs.getString("director"));
-				movieBean.setRating(rs.getString("rating"));
-				movieBean.setKey_information(rs.getString("key_information"));
-				movieBean.setActor(rs.getString("actor").split(","));
-				movieBeans.add(movieBean);
-			}
-		} catch(Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			if(rs != null) try {rs.close();} catch(SQLException ex) {}
-			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
-			if(conn != null) try {conn.close();} catch(SQLException ex) {}
-		}
-		
-		return movieBeans;
-	}
 	
 	public int deleteMovie(int movie_id) {
 		Connection conn = null;
