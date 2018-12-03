@@ -23,16 +23,18 @@
 %>
 		<b>영화관</b>: <%=movieTheaterBeans.get(i).getMovie_theater_name() %> /
 		<b>주소</b>: <%=movieTheaterBeans.get(i).getAddress() %> /
-		<b>전화번호</b>: <%=movieTheaterBeans.get(i).getTelephone_number() %>
+		<b>전화번호</b>: <%=movieTheaterBeans.get(i).getTelephone_number() %> /
+		<b>상영관 수</b>: <%=movieTheaterBeans.get(i).getTheater_num() %> /
+		<b>좌석 수</b>: <%=movieTheaterBeans.get(i).getSeat_num() %> 
 
 		<form method="post" action="modifyMovieTheater.jsp" style="display: inline;">
 			<input type=text style="display: none;" name="movie_theater_name" value="<%=movieTheaterBeans.get(i).getMovie_theater_name() %>">
-			<input type=text style="display: none;" name="address" value="<%=movieTheaterBeans.get(i).getMovie_theater_name() %>">
+			<input type=text style="display: none;" name="address" value="<%=movieTheaterBeans.get(i).getAddress() %>">
 			<input type=text style="display: none;" name="telephone_number" value="<%=movieTheaterBeans.get(i).getTelephone_number() %>">
 			<input type="submit" value="수정">
 		</form>
 		<form method="post" action="deleteMovieTheaterHandler.jsp" style="display: inline;">
-			<input type=text style="display: none;" name="movie_teater_name" value=<%=movieTheaterBeans.get(i).getMovie_theater_name() %>>
+			<input type=text style="display: none;" name="movie_theater_name" value=<%=movieTheaterBeans.get(i).getMovie_theater_name() %>>
 			<input type="submit" value="삭제">
 		</form>
 		</br></br>

@@ -22,7 +22,7 @@ public class MovieDB {
 			conn = DBConnection.getConnection();
 			
 			pstmt = conn.prepareStatement(
-					"SELECT *, group_concat(name) AS actor FROM MOVIE LEFT JOIN ACTOR "
+					"SELECT *, GROUP_CONCAT(name) AS actor_list FROM MOVIE LEFT JOIN ACTOR "
 					+ "ON MOVIE.movie_id = ACTOR.movie_id "
 					+ "GROUP BY MOVIE.movie_id");
 			rs = pstmt.executeQuery();
@@ -34,7 +34,7 @@ public class MovieDB {
 				movieBean.setDirector(rs.getString("director"));
 				movieBean.setRating(rs.getString("rating"));
 				movieBean.setKey_information(rs.getString("key_information"));
-				movieBean.setActor(rs.getString("actor").split(","));
+				movieBean.setActor(rs.getString("actor_list").split(","));
 				movieBeans.add(movieBean);
 			}
 		} catch(Exception ex) {
