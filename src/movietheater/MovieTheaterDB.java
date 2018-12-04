@@ -116,23 +116,27 @@ public class MovieTheaterDB {
 			
 			isCompleted = stmt.executeUpdate(sql);
 			
-			for(int i=0; i<theaterBean.size(); i++) {
-				int theater_id = 0;
-				String theater_name = theaterBean.get(i).getTheater_name();
-				sql = "INSERT INTO THEATER (movie_theater_name, theater_name) "
-						+ "VALUES ('" + movie_theater_name + "', '" + theater_name + "')";
-				isCompleted = stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS); // theater_id 반환 설정
-				rs = stmt.getGeneratedKeys();
+			if(theaterBean != null) {
+				for(int i=0; i<theaterBean.size(); i++) {
+					int theater_id = 0;
+					String theater_name = theaterBean.get(i).getTheater_name();
+					sql = "INSERT INTO THEATER (movie_theater_name, theater_name) "
+							+ "VALUES ('" + movie_theater_name + "', '" + theater_name + "')";
+					isCompleted = stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS); // theater_id 반환 설정
+					rs = stmt.getGeneratedKeys();
 
-				if(rs.next()) theater_id = rs.getInt(1);
-				
-				if(theater_id != 0) { // seat 삽입
-					ArrayList<SeatBean> seatBean = theaterBean.get(i).getSeatBean();
-					for(int j=0; j<seatBean.size(); j++) {
-						String seat_name = seatBean.get(j).getSeat_name();
-						sql = "INSERT INTO SEAT (theater_id, seat_name) "
-								+ "VALUES ('" + theater_id + "', '" + seat_name + "')";
-						isCompleted = stmt.executeUpdate(sql);
+					if(rs.next()) theater_id = rs.getInt(1);
+					
+					if(theater_id != 0) { // seat 삽입
+						ArrayList<SeatBean> seatBean = theaterBean.get(i).getSeatBean();
+						if(seatBean != null) {
+							for(int j=0; j<seatBean.size(); j++) {
+								String seat_name = seatBean.get(j).getSeat_name();
+								sql = "INSERT INTO SEAT (theater_id, seat_name) "
+										+ "VALUES ('" + theater_id + "', '" + seat_name + "')";
+								isCompleted = stmt.executeUpdate(sql);
+							}
+						}
 					}
 				}
 			}
@@ -174,5 +178,100 @@ public class MovieTheaterDB {
 		
 		return isCompleted;
 	}
+	
+	public int modifyMovieTheater(String movie_theater_name, MovieTheaterBean movieTheater, 
+			String[] deletedTheater, String[] deletedSeat, String[] modifiedTheater, String[] modifiedSeat) throws Exception {
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		int isCompleted = 0;
+		
+		try {
+			conn = DBConnection.getConnection();
+			conn.setAutoCommit(false); // 트랜잭션 
+			stmt = conn.createStatement();
+			
+			String new_movie_theater_name = movieTheater.getMovie_theater_name();
+			String address = movieTheater.getAddress();
+			String telephone_number = movieTheater.getTelephone_number();
+			ArrayList<TheaterBean> theaterBean = movieTheater.getTheaterBean();
+			
+			if(deletedTheater != null) {
+				for(int i=0; i<deletedTheater.length; i++) {
+					String sql = "DELETE FROM THEATER WHERE theater_id = '" + deletedTheater[i] + "'";
+					isCompleted = stmt.executeUpdate(sql);
+				}
+			}
+			if(deletedSeat != null) {
+				for(int i=0; i<deletedSeat.length; i++) {
+					String sql = "DELETE FROM SEAT WHERE seat_id = '" + deletedSeat[i] + "'";
+					isCompleted = stmt.executeUpdate(sql);
+				}
+			}
+			if(modifiedTheater != null) {
+				for(int i=0; i<modifiedTheater.length; i++) {
+					String theater_id = modifiedTheater[i].split("==>>")[0];
+					String theater_name = modifiedTheater[i].split("==>>")[1];
+					String sql = "UPDATE THEATER SET theater_name = '" + theater_name + "' WHERE theater_id = '" + theater_id + "'";
+					isCompleted = stmt.executeUpdate(sql);
+				}
+			}
+			if(modifiedSeat != null) {
+				for(int i=0; i<modifiedSeat.length; i++) {
+					String theater_id = modifiedSeat[i].split("==>>")[0];
+					String seat_name = modifiedSeat[i].split("==>>")[1];
+					String sql = "INSERT INTO SEAT (theater_id, seat_name) "
+							+ "VALUES ('" + theater_id + "', '" + seat_name + "')";
+					isCompleted = stmt.executeUpdate(sql);
+				}
+			}
+			
+			if(theaterBean != null) {
+				for(int i=0; i<theaterBean.size(); i++) {
+					int theater_id = 0;
+					String theater_name = theaterBean.get(i).getTheater_name();
+					String sql = "INSERT INTO THEATER (movie_theater_name, theater_name) "
+							+ "VALUES ('" + movie_theater_name + "', '" + theater_name + "')";
+					isCompleted = stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS); // theater_id 반환 설정
+					rs = stmt.getGeneratedKeys();
+
+					if(rs.next()) theater_id = rs.getInt(1);
+					
+					if(theater_id != 0) { // seat 삽입
+						ArrayList<SeatBean> seatBean = theaterBean.get(i).getSeatBean();
+						if(seatBean != null) {
+							for(int j=0; j<seatBean.size(); j++) {
+								String seat_name = seatBean.get(j).getSeat_name();
+								sql = "INSERT INTO SEAT (theater_id, seat_name) "
+										+ "VALUES ('" + theater_id + "', '" + seat_name + "')";
+								isCompleted = stmt.executeUpdate(sql);
+							}
+						}
+					}
+				}	
+			}
+			
+			String sql = "UPDATE MOVIE_THEATER SET "
+					+ "movie_theater_name = '" + new_movie_theater_name + "', "
+					+ "address = '" + address + "', "
+					+ "telephone_number = '" + telephone_number + "' "
+					+ "WHERE movie_theater_name = '" + movie_theater_name + "'";			
+			isCompleted = stmt.executeUpdate(sql);
+			
+			conn.commit(); // 모든 sql문 완료되면 커밋
+			conn.setAutoCommit(true); // 트랜잭션
+			
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			conn.rollback(); // 에러 시 롤백
+			return 0;
+		} finally {
+			if(stmt != null) try {stmt.close();} catch(SQLException ex) {}
+			if(conn != null) try {conn.close();} catch(SQLException ex) {}
+		}
+		
+		return isCompleted;
+	}
+
 
 }

@@ -12,18 +12,22 @@
 	/* 좌석, 상영관 데이터 SET 및 영화관 객체에 삽입 */
 	ArrayList<TheaterBean> theaterBeans = new ArrayList<TheaterBean>();
 	String theater[] = request.getParameterValues("theater");
-	for(int i=0; i<theater.length; i++) {
-		ArrayList<SeatBean> seatBeans = new ArrayList<SeatBean>();
-		String seat[] = request.getParameterValues("seat" + (i+1)); 
-		for(int j=0; j<seat.length; j++) {
-			SeatBean seatBean = new SeatBean();
-			seatBean.setSeat_name(seat[j]);
-			seatBeans.add(seatBean);
+	if(theater != null) {
+		for(int i=0; i<theater.length; i++) {
+			ArrayList<SeatBean> seatBeans = new ArrayList<SeatBean>();
+			String seat[] = request.getParameterValues("seat" + (i+1));
+			if(seat != null) {
+				for(int j=0; j<seat.length; j++) {
+					SeatBean seatBean = new SeatBean();
+					seatBean.setSeat_name(seat[j]);
+					seatBeans.add(seatBean);
+				}
+			}
+			TheaterBean theaterBean = new TheaterBean();
+			theaterBean.setTheater_name(theater[i]);
+			theaterBean.setSeatBean(seatBeans);
+			theaterBeans.add(theaterBean);
 		}
-		TheaterBean theaterBean = new TheaterBean();
-		theaterBean.setTheater_name(theater[i]);
-		theaterBean.setSeatBean(seatBeans);
-		theaterBeans.add(theaterBean);
 	}
 	movieTheater.setTheaterBean(theaterBeans);
 	/* 좌석, 상영관 데이터 SET 및 영화관 객체에 삽입 */

@@ -73,7 +73,7 @@ public class MovieDB {
 			
 			if(rs.next()) movie_id = rs.getInt(1);
 			
-			if(movie_id != 0) { // actor 삽입
+			if(movie_id != 0 && actor != null) { // actor 삽입
 				for(int i=0; i<actor.length; i++) {
 					sql = "INSERT INTO ACTOR VALUES ('" + movie_id + "', '" + actor[i] + "')";
 					isCompleted = stmt.executeUpdate(sql);
@@ -149,13 +149,15 @@ public class MovieDB {
 			pstmt.setInt(1, movie_id);
 			isCompleted = pstmt.executeUpdate();
 			
-			for(int i=0; i<actor.length; i++) {
-				String sql = "INSERT INTO ACTOR VALUES ('" + movie_id + "', '" + actor[i] + "')";
-				pstmt = conn.prepareStatement(
-						"INSERT INTO ACTOR VALUES (?, ?)");
-				pstmt.setInt(1, movie_id);
-				pstmt.setString(2, actor[i]);
-				isCompleted = pstmt.executeUpdate();
+			if(actor != null) {				
+				for(int i=0; i<actor.length; i++) {
+					String sql = "INSERT INTO ACTOR VALUES ('" + movie_id + "', '" + actor[i] + "')";
+					pstmt = conn.prepareStatement(
+							"INSERT INTO ACTOR VALUES (?, ?)");
+					pstmt.setInt(1, movie_id);
+					pstmt.setString(2, actor[i]);
+					isCompleted = pstmt.executeUpdate();
+				}
 			}
 
 			conn.commit(); // 모든 sql문 완료되면 커밋
