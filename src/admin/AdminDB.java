@@ -9,32 +9,7 @@ public class AdminDB {
 	public static AdminDB getInstance() {
 		return instance;
 	}
-	
-	public int insertAdmin(AdminBean admin) throws Exception {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		int isCompleted = 0;
 		
-		try {
-			conn = DBConnection.getConnection();
-			
-			pstmt = conn.prepareStatement(
-					"INSERT INTO ADMIN VALUES (?, ?)");
-			pstmt.setString(1, admin.getId());
-			pstmt.setString(2, admin.getPassword());
-			isCompleted = pstmt.executeUpdate();
-			
-		} catch(Exception ex) {
-			ex.printStackTrace();
-			return 0;
-		} finally {
-			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
-			if(conn != null) try {conn.close();} catch(SQLException ex) {}
-		}
-		
-		return isCompleted;
-	}
-	
 	public int selectAdminByIdAndPw(String id, String password) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -57,6 +32,31 @@ public class AdminDB {
 			return 0;
 		} finally {
 			if(rs != null) try {rs.close();} catch(SQLException ex) {}
+			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
+			if(conn != null) try {conn.close();} catch(SQLException ex) {}
+		}
+		
+		return isCompleted;
+	}
+
+	public int insertAdmin(AdminBean admin) throws Exception {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int isCompleted = 0;
+		
+		try {
+			conn = DBConnection.getConnection();
+			
+			pstmt = conn.prepareStatement(
+					"INSERT INTO ADMIN VALUES (?, ?)");
+			pstmt.setString(1, admin.getId());
+			pstmt.setString(2, admin.getPassword());
+			isCompleted = pstmt.executeUpdate();
+			
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			return 0;
+		} finally {
 			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
 			if(conn != null) try {conn.close();} catch(SQLException ex) {}
 		}

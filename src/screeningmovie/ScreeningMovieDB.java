@@ -49,6 +49,47 @@ public class ScreeningMovieDB {
 		
 		return screeningMovieBeans;
 	}
+
+	public ArrayList<ScreeningMovieBean> selectScreeningMovieListByBookRate() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ArrayList<ScreeningMovieBean> screeningMovieBeans = new ArrayList<ScreeningMovieBean>();
+		
+		try {
+			conn = DBConnection.getConnection();
+			
+			pstmt = conn.prepareStatement(
+					"SELECT *, SUM(book_num) / book_total_num AS book_rate "
+					+ "FROM "
+					+ "(SELECT SCREENING_TIMETABLE.movie_id, MOVIE.title, "
+					+ "(SELECT COUNT(*) FROM BOOKING WHERE screening_timetable_id = SCREENING_TIMETABLE.screening_timetable_id) "
+					+ "AS book_num, "
+					+ "(SELECT COUNT(*) FROM BOOKING) "
+					+ "AS book_total_num "
+					+ "FROM SCREENING_TIMETABLE "
+					+ "LEFT JOIN MOVIE ON SCREENING_TIMETABLE.movie_id = MOVIE.movie_id) AS sub "
+					+ "GROUP BY movie_id "
+					+ "ORDER BY book_rate DESC");
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				ScreeningMovieBean screeningMovieBean = new ScreeningMovieBean();
+				screeningMovieBean.setTitle(rs.getString("title"));
+				screeningMovieBean.setMovie_id(rs.getInt("movie_id"));
+				screeningMovieBean.setBook_rate(rs.getDouble("book_rate"));
+				screeningMovieBeans.add(screeningMovieBean);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if(rs != null) try {rs.close();} catch(SQLException ex) {}
+			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
+			if(conn != null) try {conn.close();} catch(SQLException ex) {}
+		}
+		
+		return screeningMovieBeans;
+	}
 	
 	public int insertScreeningMovie(ScreeningMovieBean screeningMovie) throws Exception {
 		Connection conn = null;
