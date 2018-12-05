@@ -25,7 +25,7 @@
 		<div>
 <%
 		MovieTheaterDB movieTheaterDB = MovieTheaterDB.getInstance();
-		ArrayList<TheaterBean> theaterBeans = movieTheaterDB.selectTheaterList(request.getParameter("movie_theater_name"));
+		ArrayList<TheaterBean> theaterBeans = movieTheaterDB.selectTheaterAndSeatList(request.getParameter("movie_theater_name"));
 		for(int i=0; i<theaterBeans.size(); i++) {
 			TheaterBean theaterBean = theaterBeans.get(i);
 			%><div id="<%=theaterBean.getTheater_id() %>" name="<%=theaterBean.getTheater_name() %>">

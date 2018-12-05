@@ -94,8 +94,7 @@ public class MovieDB {
 		
 		return isCompleted;
 	}
-	
-	
+		
 	public int deleteMovie(int movie_id) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;

@@ -12,8 +12,9 @@
 <body>
 	<b><%=session.getAttribute("id") %></b>님 환영합니다.
 	<form method="post" action="../common/logOut.jsp">
-		<button type="button" onclick="location.href='movieList.jsp'">영화 목록 관리</button>
-		<button type="button" onclick="location.href='movieTheaterList.jsp'">영화관 목록 관리</button>
+		<button type="button" onclick="location.href='movieList.jsp'">영화 정보 관리</button>
+		<button type="button" onclick="location.href='movieTheaterList.jsp'">영화관 정보 관리</button>
+		<button type="button" onclick="location.href='screeningMovieList.jsp'">상영 영화 정보 관리</button>
 		<button type="button" onclick="location.href='signUp.jsp'">영화 티켓 발행</button>
 		<button type="button" onclick="location.href='signUp.jsp'">VIP 고객 관리</button>
 		<button type="button" onclick="location.href='signUp.jsp'">관리자 등록</button>

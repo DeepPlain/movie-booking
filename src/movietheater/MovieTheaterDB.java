@@ -49,7 +49,38 @@ public class MovieTheaterDB {
 		return movieTheaterBeans;
 	}
 
-	public ArrayList<TheaterBean> selectTheaterList(String movie_theater_name) {
+	public ArrayList<TheaterBean> selectTheaterList() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ArrayList<TheaterBean> theaterBeans = new ArrayList<TheaterBean>();
+		
+		try {
+			conn = DBConnection.getConnection();
+			
+			pstmt = conn.prepareStatement(
+					"SELECT * FROM THEATER");
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				TheaterBean theaterBean = new TheaterBean();
+				theaterBean.setTheater_id(rs.getInt("theater_id"));
+				theaterBean.setMovie_theater_name(rs.getString("movie_theater_name"));
+				theaterBean.setTheater_name(rs.getString("theater_name"));
+				theaterBeans.add(theaterBean);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if(rs != null) try {rs.close();} catch(SQLException ex) {}
+			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
+			if(conn != null) try {conn.close();} catch(SQLException ex) {}
+		}
+		
+		return theaterBeans;
+	}
+	
+	public ArrayList<TheaterBean> selectTheaterAndSeatList(String movie_theater_name) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
