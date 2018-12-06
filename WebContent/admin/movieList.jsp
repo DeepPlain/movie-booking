@@ -50,14 +50,14 @@
 <%
 			for(int j=0; j<actor.length; j++) {
 %>
-				<input type=text style="display: none;" name="actor" value=<%=actor[j] %>>
+				<input type=text style="display: none;" name="actor" value="<%=actor[j] %>">
 <%
 			}
 %>			
 			<input type="submit" value="수정">
 		</form>
 		<form method="post" action="deleteMovieHandler.jsp" style="display: inline;">
-			<input type=text style="display: none;" name="movie_id" value=<%=movieBeans.get(i).getMovie_id() %>>
+			<input type=text style="display: none;" name="movie_id" value="<%=movieBeans.get(i).getMovie_id() %>">
 			<input type="submit" value="삭제">
 		</form>
 		</br></br>

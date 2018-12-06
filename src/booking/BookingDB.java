@@ -45,6 +45,7 @@ private static BookingDB instance = new BookingDB();
 				bookingBean.setPrice(rs.getInt("price"));
 				bookingBean.setScreening_date(rs.getTimestamp("screening_date"));
 				bookingBean.setBooking_date(rs.getTimestamp("booking_date"));
+				bookingBean.setPayment_type(rs.getString("payment_type"));
 				bookingBean.setPayment_status(rs.getBoolean("payment_status"));
 				bookingBean.setTicket_issue_status(rs.getBoolean("ticket_issue_status"));
 				bookingBeans.add(bookingBean);

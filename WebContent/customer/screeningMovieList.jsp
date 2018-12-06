@@ -3,6 +3,8 @@
 <%@ page import="screeningmovie.*" %>      
 <%@ page import="java.util.ArrayList" %>
     
+<% request.setCharacterEncoding("utf-8"); %>
+    
 <jsp:include page="sessionCheck.jsp" flush="false"/>
     
 <!DOCTYPE html>
@@ -22,8 +24,8 @@
 		NO.<%=(i+1) %> <b>제목</b>: <%=screeningMovieBeans.get(i).getTitle() %> /
 		<b>예매율</b>: <%=(int)(screeningMovieBeans.get(i).getBook_rate() * 100) %>%
 
-		<form method="post" action="bookMovie.jsp" style="display: inline;">
-			<input type=text style="display: none;" name="movie_id" value=<%=screeningMovieBeans.get(i).getMovie_id() %>>
+		<form method="post" action="bookMovie-movieTheater.jsp" style="display: inline;">
+			<input type=text style="display: none;" name="movie_id" value="<%=screeningMovieBeans.get(i).getMovie_id() %>">
 			<input type="submit" value="예매">
 		</form>
 		</br></br>

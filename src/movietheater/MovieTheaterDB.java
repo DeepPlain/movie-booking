@@ -48,7 +48,7 @@ public class MovieTheaterDB {
 		
 		return movieTheaterBeans;
 	}
-
+	
 	public ArrayList<TheaterBean> selectTheaterList() {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -127,6 +127,73 @@ public class MovieTheaterDB {
 		return theaterBeans;
 	}
 	
+	public ArrayList<SeatBean> selectSeatByScreeningTimetableId(int theater_id, int screening_timetable_id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ArrayList<SeatBean> seatBeans = new ArrayList<SeatBean>();
+		
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(
+					"SELECT * "
+					+ "FROM SEAT WHERE theater_id = ? AND seat_id not in "
+					+ "(SELECT seat_id FROM BOOKING WHERE screening_timetable_id = ?)");
+			pstmt.setInt(1, theater_id);
+			pstmt.setInt(2, screening_timetable_id);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				SeatBean seatBean = new SeatBean();
+				seatBean.setSeat_id(rs.getInt("seat_id"));
+				seatBean.setSeat_name(rs.getString("seat_name"));
+				seatBeans.add(seatBean);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if(rs != null) try {rs.close();} catch(SQLException ex) {}
+			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
+			if(conn != null) try {conn.close();} catch(SQLException ex) {}
+		}
+		
+		return seatBeans;
+	}
+	
+	public String selectSeatNum(int theater_id, int screening_timetable_id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String seat_num = null;
+		
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(
+					"SELECT *, COUNT(*) AS left_seat_num, "
+					+ "(SELECT COUNT(*) FROM SEAT WHERE theater_id = ?) AS total_seat_num "
+					+ "FROM SEAT WHERE theater_id = ? AND seat_id not in "
+					+ "(SELECT seat_id FROM BOOKING WHERE screening_timetable_id = ?)");
+			pstmt.setInt(1, theater_id);
+			pstmt.setInt(2, theater_id);
+			pstmt.setInt(3, screening_timetable_id);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				int left_seat_num = rs.getInt("left_seat_num");
+				int total_seat_num = rs.getInt("total_seat_num");
+				seat_num = String.valueOf(left_seat_num) + " / " + String.valueOf(total_seat_num);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if(rs != null) try {rs.close();} catch(SQLException ex) {}
+			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
+			if(conn != null) try {conn.close();} catch(SQLException ex) {}
+		}
+		
+		return seat_num;
+	}
+		
 	public int insertMovieTheater(MovieTheaterBean movieTheater) throws Exception {
 		Connection conn = null;
 		Statement stmt = null;

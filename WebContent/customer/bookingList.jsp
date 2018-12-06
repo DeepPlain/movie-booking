@@ -26,11 +26,12 @@
 		<b>가격</b>: <%=bookingBeans.get(i).getPrice() %> /
 		<b>상영 시간</b>: <%=bookingBeans.get(i).getScreening_date() %> /
 		<b>예약일</b>: <%=bookingBeans.get(i).getBooking_date() %> /
+		<b>결제 유형</b>: <%=bookingBeans.get(i).getPayment_type() %> /
 		<b>결제 여부</b>: <%=bookingBeans.get(i).isPayment_status() %> /
 		<b>티켓 발행 여부</b>: <%=bookingBeans.get(i).isTicket_issue_status() %>
 
 		<form method="post" action="deleteBookingHandler.jsp" style="display: inline;">
-			<input type=text style="display: none;" name="booking_id" value=<%=bookingBeans.get(i).getBooking_id() %>>
+			<input type=text style="display: none;" name="booking_id" value="<%=bookingBeans.get(i).getBooking_id() %>">
 			<input type="submit" value="예약 취소">
 		</form>
 		</br></br>

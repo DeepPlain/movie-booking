@@ -27,7 +27,7 @@
 		<b>시간</b>: <%=screeningMovieBeans.get(i).getScreening_date() %>
 
 		<form method="post" action="deleteScreeningMovieHandler.jsp" style="display: inline;">
-			<input type=text style="display: none;" name="screening_timetable_id" value=<%=screeningMovieBeans.get(i).getScreening_timetable_id() %>>
+			<input type=text style="display: none;" name="screening_timetable_id" value="<%=screeningMovieBeans.get(i).getScreening_timetable_id() %>">
 			<input type="submit" value="삭제">
 		</form>
 		</br></br>

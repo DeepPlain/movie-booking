@@ -11,6 +11,7 @@ public class BookingBean {
 	private int price;
 	private Timestamp screening_date;
 	private Timestamp booking_date;
+	private String payment_type;
 	private boolean payment_status;
 	private boolean ticket_issue_status;
 	
@@ -61,6 +62,12 @@ public class BookingBean {
 	}
 	public void setBooking_date(Timestamp booking_date) {
 		this.booking_date = booking_date;
+	}
+	public String getPayment_type() {
+		return payment_type;
+	}
+	public void setPayment_type(String payment_type) {
+		this.payment_type = payment_type;
 	}
 	public boolean isPayment_status() {
 		return payment_status;

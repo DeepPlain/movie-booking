@@ -34,7 +34,7 @@
 			<input type="submit" value="수정">
 		</form>
 		<form method="post" action="deleteMovieTheaterHandler.jsp" style="display: inline;">
-			<input type=text style="display: none;" name="movie_theater_name" value=<%=movieTheaterBeans.get(i).getMovie_theater_name() %>>
+			<input type=text style="display: none;" name="movie_theater_name" value="<%=movieTheaterBeans.get(i).getMovie_theater_name() %>">
 			<input type="submit" value="삭제">
 		</form>
 		</br></br>
