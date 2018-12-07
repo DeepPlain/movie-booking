@@ -15,6 +15,41 @@ public class ScreeningMovieDB {
 		return instance;
 	}
 	
+	public ScreeningMovieBean selectScreeningMovieById(int screening_timetable_id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ScreeningMovieBean screeningMovieBean = new ScreeningMovieBean();
+		
+		try {
+			conn = DBConnection.getConnection();
+			
+			pstmt = conn.prepareStatement(
+					"SELECT * FROM SCREENING_TIMETABLE "
+					+ "LEFT JOIN MOVIE ON SCREENING_TIMETABLE.movie_id = MOVIE.movie_id "
+					+ "LEFT JOIN THEATER ON SCREENING_TIMETABLE.theater_id = THEATER.theater_id "
+					+ "WHERE screening_timetable_id = ?");
+			pstmt.setInt(1, screening_timetable_id);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				screeningMovieBean.setTitle(rs.getString("title"));
+				screeningMovieBean.setMovie_theater_name(rs.getString("movie_theater_name"));
+				screeningMovieBean.setTheater_name(rs.getString("theater_name"));
+				screeningMovieBean.setPrice(rs.getInt("price"));
+				screeningMovieBean.setScreening_date(rs.getTimestamp("screening_date"));
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if(rs != null) try {rs.close();} catch(SQLException ex) {}
+			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
+			if(conn != null) try {conn.close();} catch(SQLException ex) {}
+		}
+		
+		return screeningMovieBean;
+	}
+	
 	public ArrayList<ScreeningMovieBean> selectScreeningMovieList() {
 		Connection conn = null;
 		PreparedStatement pstmt = null;

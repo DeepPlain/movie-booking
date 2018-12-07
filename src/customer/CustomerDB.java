@@ -31,6 +31,7 @@ public class CustomerDB {
 				customerBean.setAddress(rs.getString("address"));
 				customerBean.setPhone_number(rs.getString("phone_number"));
 				customerBean.setPassword(rs.getString("password"));
+				customerBean.setPoint(rs.getInt("point"));
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace();

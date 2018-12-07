@@ -22,20 +22,19 @@
 %>
 	<b style="font-size: x-large;">영화 예약 (좌석 선택) <%=seat_num %> </b> 
 	</br></br>
+	<form method="post" action="bookMovie-payment.jsp" style="display: inline;">
+		<input type=text style="display: none;" name="screening_timetable_id" value="<%=screening_timetable_id %>">
 <%
 	ArrayList<SeatBean> seatBeans = movieTheaterDB.selectSeatByScreeningTimetableId(theater_id, screening_timetable_id);
 	for(int i=0; i<seatBeans.size(); i++) {
 %>
-		<%=seatBeans.get(i).getSeat_name() %> 
-
-		<form method="post" action="bookMovie-payment.jsp" style="display: inline;">
-			<input type=text style="display: none;" name="seat_id" value="<%=seatBeans.get(i).getSeat_id() %>">
-			<input type=text style="display: none;" name="screening_timetable_id" value="<%=screening_timetable_id %>">
-			<input type="submit" value="선택">
-		</form>
-		</br></br>
+		<input type="checkbox" name="seat_id" value="<%=seatBeans.get(i).getSeat_id() %>==>><%=seatBeans.get(i).getSeat_name() %>"><%=seatBeans.get(i).getSeat_name() %>
 <%
-	}	
+	}
 %>
+		<input type="submit" value="선택">
+	</form>
+	</br></br>
+		
 </body>
 </html>

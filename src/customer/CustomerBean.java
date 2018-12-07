@@ -9,6 +9,7 @@ public class CustomerBean {
 	private Timestamp date_of_birth;
 	private String address;
 	private String phone_number;
+	private int point;
 	
 	public String getId() {
 		return id;
@@ -45,6 +46,12 @@ public class CustomerBean {
 	}
 	public void setPhone_number(String phone_number) {
 		this.phone_number = phone_number;
+	}
+	public int getPoint() {
+		return point;
+	}
+	public void setPoint(int point) {
+		this.point = point;
 	}
 
 }

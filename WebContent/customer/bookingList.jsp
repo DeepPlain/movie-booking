@@ -18,16 +18,28 @@
 	BookingDB bookingDB = BookingDB.getInstance();
 	ArrayList<BookingBean> bookingBeans = bookingDB.selectBookingListById((String)session.getAttribute("id"));
 	for(int i=0; i<bookingBeans.size(); i++) {
-%>
-		<%=(i+1) %> <b>제목</b>: <%=bookingBeans.get(i).getTitle() %> /
+%>				
+		<%=(i+1) %>. <b>제목</b>: <%=bookingBeans.get(i).getTitle() %> /
 		<b>영화관</b>: <%=bookingBeans.get(i).getMovie_theater_name() %> /
 		<b>상영관</b>: <%=bookingBeans.get(i).getTheater_name() %> /
-		<b>좌석</b>: <%=bookingBeans.get(i).getSeat_name() %> /
-		<b>가격</b>: <%=bookingBeans.get(i).getPrice() %> /
+		<b>좌석</b>: <%=bookingBeans.get(i).getSeat_name().replace(",", ", ") %> /
+		<b>가격(1장)</b>: <%=bookingBeans.get(i).getPrice() %> /
 		<b>상영 시간</b>: <%=bookingBeans.get(i).getScreening_date() %> /
 		<b>예약일</b>: <%=bookingBeans.get(i).getBooking_date() %> /
 		<b>결제 유형</b>: <%=bookingBeans.get(i).getPayment_type() %> /
-		<b>결제 여부</b>: <%=bookingBeans.get(i).isPayment_status() %> /
+		<b>결제 여부</b>: 
+<%
+		if(bookingBeans.get(i).getPayment_id() != 0) {
+			%>true / 
+			<b>사용 포인트</b>: <%=bookingBeans.get(i).getPoint() %> / 
+			<b>결제 금액</b>: <%=bookingBeans.get(i).getPayment_amount() %> / 
+			<b>결제일</b>: <%=bookingBeans.get(i).getPayment_date() %> / 
+<%
+		}
+		else {
+			%>false / <%
+		}
+%>
 		<b>티켓 발행 여부</b>: <%=bookingBeans.get(i).isTicket_issue_status() %>
 
 		<form method="post" action="deleteBookingHandler.jsp" style="display: inline;">

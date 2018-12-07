@@ -138,7 +138,7 @@ public class MovieTheaterDB {
 			pstmt = conn.prepareStatement(
 					"SELECT * "
 					+ "FROM SEAT WHERE theater_id = ? AND seat_id not in "
-					+ "(SELECT seat_id FROM BOOKING WHERE screening_timetable_id = ?)");
+					+ "(SELECT seat_id FROM BOOKED_SEAT WHERE booking_id in (SELECT booking_id FROM BOOKING WHERE screening_timetable_id = ?))");
 			pstmt.setInt(1, theater_id);
 			pstmt.setInt(2, screening_timetable_id);
 			rs = pstmt.executeQuery();
@@ -172,7 +172,7 @@ public class MovieTheaterDB {
 					"SELECT *, COUNT(*) AS left_seat_num, "
 					+ "(SELECT COUNT(*) FROM SEAT WHERE theater_id = ?) AS total_seat_num "
 					+ "FROM SEAT WHERE theater_id = ? AND seat_id not in "
-					+ "(SELECT seat_id FROM BOOKING WHERE screening_timetable_id = ?)");
+					+ "(SELECT seat_id FROM BOOKED_SEAT WHERE booking_id in (SELECT booking_id FROM BOOKING WHERE screening_timetable_id = ?))");
 			pstmt.setInt(1, theater_id);
 			pstmt.setInt(2, theater_id);
 			pstmt.setInt(3, screening_timetable_id);
