@@ -10,6 +10,7 @@ public class CustomerBean {
 	private String address;
 	private String phone_number;
 	private int point;
+	private int booking_num;
 	
 	public String getId() {
 		return id;
@@ -53,5 +54,10 @@ public class CustomerBean {
 	public void setPoint(int point) {
 		this.point = point;
 	}
-
+	public int getBooking_num() {
+		return booking_num;
+	}
+	public void setBooking_num(int booking_num) {
+		this.booking_num = booking_num;
+	}
 }

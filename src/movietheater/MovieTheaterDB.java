@@ -60,6 +60,12 @@ public class MovieTheaterDB {
 			
 			pstmt = conn.prepareStatement(
 					"SELECT * FROM THEATER");
+			
+			// 상영관 1개 당 영화 1개 등록
+//			pstmt = conn.prepareStatement(
+//					"SELECT * FROM THEATER WHERE theater_id not in "
+//					+ "(SELECT theater_id FROM SCREENING_TIMETABLE)");
+//			
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {

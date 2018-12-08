@@ -3,6 +3,7 @@ package booking;
 import java.sql.*;
 import java.util.ArrayList;
 
+import customer.CustomerBean;
 import movietheater.MovieTheaterBean;
 import movietheater.SeatBean;
 import movietheater.TheaterBean;
@@ -128,6 +129,43 @@ private static BookingDB instance = new BookingDB();
 		return isCompleted;
 	}
 	
+	public int insertPaymentAndIssueTicket(BookingBean booking, String customer_id, int seat_num) throws Exception {
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		int isCompleted = 0;
+		int booking_id = booking.getBooking_id();
+		int point = booking.getPoint();
+		int payment_amount = booking.getPayment_amount();
+		
+		try {
+			conn = DBConnection.getConnection();
+			conn.setAutoCommit(false); // 트랜잭션 
+			stmt = conn.createStatement();
+			
+			String sql = "INSERT INTO PAYMENT (booking_id, point, payment_amount, ticket_issue_status) "
+					+ "VALUES ('" + booking_id + "', '" + point+ "', '" + (payment_amount - point) + "', true)";
+			isCompleted = stmt.executeUpdate(sql);
+			
+			int newPoint = 100 * seat_num;
+			sql = "UPDATE CUSTOMER SET point = point - '" + point + "' + '" + newPoint + "' WHERE customer_id = '" + customer_id + "'";
+			isCompleted = stmt.executeUpdate(sql);
+						
+			conn.commit(); // 모든 sql문 완료되면 커밋
+			conn.setAutoCommit(true); // 트랜잭션
+			
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			conn.rollback(); // 에러 시 롤백
+			return 0;
+		} finally {
+			if(stmt != null) try {stmt.close();} catch(SQLException ex) {}
+			if(conn != null) try {conn.close();} catch(SQLException ex) {}
+		}
+		
+		return isCompleted;
+	}
+	
 	public int deleteBooking(int booking_id, String customer_id) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -182,4 +220,29 @@ private static BookingDB instance = new BookingDB();
 		return isCompleted;
 	}
 
+	public int modifyTicketIssueStatus(int booking_id) throws Exception {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int isCompleted = 0;
+		
+		try {
+			conn = DBConnection.getConnection();
+			
+			pstmt = conn.prepareStatement(
+					"UPDATE PAYMENT SET ticket_issue_status = true "
+					+ "WHERE booking_id = ?");
+			pstmt.setInt(1, booking_id);
+			
+			isCompleted = pstmt.executeUpdate();
+						
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			return 0;
+		} finally {
+			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
+			if(conn != null) try {conn.close();} catch(SQLException ex) {}
+		}
+		
+		return isCompleted;
+	}
 }

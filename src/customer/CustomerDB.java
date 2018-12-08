@@ -1,6 +1,7 @@
 package customer;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import util.DBConnection;
 
@@ -44,6 +45,49 @@ public class CustomerDB {
 		return customerBean;
 	}
 	
+	public ArrayList<CustomerBean> selectVIPList(Timestamp start_date, Timestamp end_date) throws Exception {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ArrayList<CustomerBean> customerBeans = new ArrayList<CustomerBean>();
+		
+		try {
+			conn = DBConnection.getConnection();
+			
+			pstmt = conn.prepareStatement(
+					"SELECT *, COUNT(BOOKING.customer_id) AS booking_num "
+					+ "FROM BOOKING "
+					+ "LEFT JOIN CUSTOMER "
+					+ "ON BOOKING.customer_id = CUSTOMER.customer_id "
+					+ "WHERE ? < booking_date AND booking_date < ? "
+					+ "GROUP BY BOOKING.customer_id "
+					+ "ORDER BY booking_num DESC LIMIT 10");
+			pstmt.setTimestamp(1, start_date);
+			pstmt.setTimestamp(2, end_date);
+			rs = pstmt.executeQuery();
+
+			while(rs.next()) {
+				CustomerBean customerBean = new CustomerBean();
+				customerBean.setId(rs.getString("customer_id"));
+				customerBean.setName(rs.getString("name"));
+				customerBean.setDate_of_birth(rs.getTimestamp("date_of_birth"));
+				customerBean.setAddress(rs.getString("address"));
+				customerBean.setPhone_number(rs.getString("phone_number"));
+				customerBean.setPoint(rs.getInt("point"));
+				customerBean.setBooking_num(rs.getInt("booking_num"));
+				customerBeans.add(customerBean);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if(rs != null) try {rs.close();} catch(SQLException ex) {}
+			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}
+			if(conn != null) try {conn.close();} catch(SQLException ex) {}
+		}
+		
+		return customerBeans;
+	}
+
 	public int selectCustomerByIdAndPw(String id, String password) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;

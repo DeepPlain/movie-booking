@@ -42,12 +42,21 @@
 %>
 		<b>티켓 발행 여부</b>: <%=bookingBeans.get(i).isTicket_issue_status() %>
 
-		<form method="post" action="deleteBookingHandler.jsp" style="display: inline;">
-			<input type=text style="display: none;" name="booking_id" value="<%=bookingBeans.get(i).getBooking_id() %>">
-			<input type="submit" value="예약 취소">
-		</form>
-		</br></br>
 <%
+			if(!bookingBeans.get(i).isTicket_issue_status()) {
+%>
+				<form method="post" action="deleteBookingHandler.jsp" style="display: inline;">
+					<input type=text style="display: none;" name="booking_id" value="<%=bookingBeans.get(i).getBooking_id() %>">
+					<input type="submit" value="예약 취소">
+				</form>
+				</br></br>
+<%
+			}
+			else {
+%>
+				</br></br>
+<%
+			}
 	}	
 %>
 </body>
