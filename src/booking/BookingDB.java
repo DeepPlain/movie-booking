@@ -128,21 +128,51 @@ private static BookingDB instance = new BookingDB();
 		return isCompleted;
 	}
 	
-	public int deleteBooking(int booking_id) {
+	public int deleteBooking(int booking_id, String customer_id) throws Exception {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		int isCompleted = 0;
+		int point = 0;
+		int seat_num = 0;
 		
 		try {
 			conn = DBConnection.getConnection();
+			conn.setAutoCommit(false); // 트랜잭션
+			
+			pstmt = conn.prepareStatement(
+					"SELECT point, "
+					+ "(SELECT COUNT(*) FROM BOOKED_SEAT WHERE booking_id = ?) AS seat_num "
+					+ "FROM PAYMENT WHERE booking_id = ? ");
+			pstmt.setInt(1, booking_id);
+			pstmt.setInt(2, booking_id);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				point = rs.getInt("point");
+				seat_num = rs.getInt("seat_num");
+
+				int newPoint = 100 * seat_num;
+				pstmt = conn.prepareStatement(
+						"UPDATE CUSTOMER SET point = point + ? - ? WHERE customer_id = ?");
+				pstmt.setInt(1, point);
+				pstmt.setInt(2, newPoint);
+				pstmt.setString(3, customer_id);
+				isCompleted = pstmt.executeUpdate();
+			}
+			
 			
 			pstmt = conn.prepareStatement(
 					"DELETE FROM BOOKING WHERE booking_id = ?");
 			pstmt.setInt(1, booking_id);
 			isCompleted = pstmt.executeUpdate();
 			
+			conn.commit(); // 모든 sql문 완료되면 커밋
+			conn.setAutoCommit(true); // 트랜잭션
+			
 		} catch(Exception ex) {
 			ex.printStackTrace();
+			conn.rollback(); // 에러 시 롤백
 			return 0;
 		} finally {
 			if(pstmt != null) try {pstmt.close();} catch(SQLException ex) {}

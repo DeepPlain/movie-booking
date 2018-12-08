@@ -7,7 +7,7 @@
 <%
 	int booking_id = Integer.parseInt(request.getParameter("booking_id"));
 	BookingDB bookingDB = BookingDB.getInstance();
-	int isCompleted = bookingDB.deleteBooking(booking_id);
+	int isCompleted = bookingDB.deleteBooking(booking_id, (String)session.getAttribute("id"));
 	if(isCompleted == 1) {
 %>
 		<script>
