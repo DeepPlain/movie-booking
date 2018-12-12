@@ -100,8 +100,16 @@ private static BookingDB instance = new BookingDB();
 			
 			for(int i=0; i<seat_id.length; i++) {
 				sql = "INSERT INTO BOOKED_SEAT (booking_id, seat_id) "
-						+ "VALUES ('" + booking_id + "', '" + seat_id[i] + "')";
+						+ "SELECT '" + booking_id + "', '" + seat_id[i] + "' FROM DUAL "
+						+ "WHERE NOT EXISTS "
+						+ "(SELECT * FROM BOOKED_SEAT "
+						+ "LEFT JOIN BOOKING "
+						+ "ON BOOKED_SEAT.booking_id = BOOKING.booking_id "
+						+ "WHERE seat_id = '" + seat_id[i] + "' AND screening_timetable_id = '" + screening_timetable_id + "')";
 				isCompleted = stmt.executeUpdate(sql);
+				if(isCompleted == 0) { // 좌석이 이미 예약되어있는 경우
+					throw new Exception();
+				}
 			}
 			
 			if(payment_type.equals("인터넷 결제")) {
