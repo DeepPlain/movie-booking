@@ -97,16 +97,16 @@ public class ScreeningMovieDB {
 			conn = DBConnection.getConnection();
 			
 			pstmt = conn.prepareStatement(
-					"SELECT *, SUM(book_num) / book_total_num AS book_rate "
-					+ "FROM "
-					+ "(SELECT SCREENING_TIMETABLE.movie_id, MOVIE.title, "
-					+ "(SELECT COUNT(*) FROM BOOKING WHERE screening_timetable_id = SCREENING_TIMETABLE.screening_timetable_id) "
-					+ "AS book_num, "
-					+ "(SELECT COUNT(*) FROM BOOKING) "
-					+ "AS book_total_num "
-					+ "FROM SCREENING_TIMETABLE "
-					+ "LEFT JOIN MOVIE ON SCREENING_TIMETABLE.movie_id = MOVIE.movie_id) AS sub "
-					+ "GROUP BY movie_id "
+					"(SELECT MOVIE.movie_id, title, COUNT(*) AS book_num, "
+					+ "COUNT(*) / (SELECT COUNT(*) FROM DBCLASS.BOOKED_SEAT) AS book_rate "
+					+ "FROM DBCLASS.BOOKING "
+					+ "LEFT JOIN DBCLASS.BOOKED_SEAT "
+					+ "ON BOOKING.booking_id = BOOKED_SEAT.booking_id "
+					+ "LEFT JOIN DBCLASS.SCREENING_TIMETABLE "
+					+ "ON BOOKING.screening_timetable_id = SCREENING_TIMETABLE.screening_timetable_id "
+					+ "LEFT JOIN DBCLASS.MOVIE "
+					+ "ON SCREENING_TIMETABLE.movie_id = MOVIE.movie_id "
+					+ "GROUP BY SCREENING_TIMETABLE.movie_id) "
 					+ "ORDER BY book_rate DESC");
 			rs = pstmt.executeQuery();
 			
@@ -293,7 +293,7 @@ public class ScreeningMovieDB {
 			}
 			
 			sql = "SELECT * FROM SCREENING_TIMETABLE "
-					+ "WHERE theater_id = '" + theater_id + "' AND movie_id = '" + movie_id + "'"
+					+ "WHERE theater_id = '" + theater_id + "' "
 					+ "AND ('" + screening_date + "' BETWEEN screening_date AND end_date " + 
 					"OR screening_date BETWEEN '" + screening_date + "' AND '" + end_date + "')";
 			rs = stmt.executeQuery(sql);
