@@ -11,6 +11,7 @@ public class BookingBean {
 	private String seat_id[];
 	private String seat_name;
 	private Timestamp screening_date;
+	private Timestamp end_date;
 	private Timestamp booking_date;
 	private Timestamp payment_date;
 	private String payment_type;
@@ -67,6 +68,12 @@ public class BookingBean {
 	}
 	public void setScreening_date(Timestamp screening_date) {
 		this.screening_date = screening_date;
+	}
+	public Timestamp getEnd_date() {
+		return end_date;
+	}
+	public void setEnd_date(Timestamp end_date) {
+		this.end_date = end_date;
 	}
 	public Timestamp getBooking_date() {
 		return booking_date;

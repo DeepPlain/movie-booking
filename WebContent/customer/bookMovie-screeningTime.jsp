@@ -25,7 +25,7 @@
 	ArrayList<ScreeningMovieBean> screeningMovieBeans = screeningMovieDB.selectScreeningTimeByTheaterId(movie_id, screening_date, theater_id);
 	for(int i=0; i<screeningMovieBeans.size(); i++) {
 %>
-		<%=screeningMovieBeans.get(i).getScreening_date() %> 
+		<%=screeningMovieBeans.get(i).getScreening_date() %> ~ <%=screeningMovieBeans.get(i).getEnd_date() %>
 
 		<form method="post" action="bookMovie-seat.jsp" style="display: inline;">
 			<input type=text style="display: none;" name="theater_id" value="<%=theater_id %>">

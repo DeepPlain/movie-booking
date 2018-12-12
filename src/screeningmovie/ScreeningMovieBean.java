@@ -11,6 +11,7 @@ public class ScreeningMovieBean {
 	private String theater_name;
 	private int price;
 	private Timestamp screening_date;
+	private Timestamp end_date;
 	private double book_rate;
 	
 	public int getScreening_timetable_id() {
@@ -60,6 +61,12 @@ public class ScreeningMovieBean {
 	}
 	public void setScreening_date(Timestamp screening_date) {
 		this.screening_date = screening_date;
+	}
+	public Timestamp getEnd_date() {
+		return end_date;
+	}
+	public void setEnd_date(Timestamp end_date) {
+		this.end_date = end_date;
 	}
 	public double getBook_rate() {
 		return book_rate;

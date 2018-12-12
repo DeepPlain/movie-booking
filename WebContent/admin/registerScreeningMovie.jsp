@@ -43,7 +43,8 @@
 		</select>
 		<br/>		
 		<b>가격</b>: <input type="text" name="price"><br/>
-		<b>시간</b>: <input type="datetime-local" name="screening_date"><br/>
+		<b>시작 시간</b>: <input type="datetime-local" name="screening_date"><br/>
+		<b>종료 시간</b>: <input type="datetime-local" name="end_date"><br/>
 		<input type="submit" value="등록">
 	</form>
 </body>

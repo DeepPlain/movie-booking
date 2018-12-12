@@ -24,7 +24,8 @@
 		<b>상영관</b>: <%=bookingBeans.get(i).getTheater_name() %> /
 		<b>좌석</b>: <%=bookingBeans.get(i).getSeat_name().replace(",", ", ") %> /
 		<b>가격(1장)</b>: <%=bookingBeans.get(i).getPrice() %> /
-		<b>상영 시간</b>: <%=bookingBeans.get(i).getScreening_date() %> /
+		<b>시작 시간</b>: <%=bookingBeans.get(i).getScreening_date() %> /
+		<b>종료 시간</b>: <%=bookingBeans.get(i).getEnd_date() %> /
 		<b>예약일</b>: <%=bookingBeans.get(i).getBooking_date() %> /
 		<b>결제 유형</b>: <%=bookingBeans.get(i).getPayment_type() %> /
 		<b>결제 여부</b>: 

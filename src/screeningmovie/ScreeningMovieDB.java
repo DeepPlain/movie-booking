@@ -73,6 +73,7 @@ public class ScreeningMovieDB {
 				screeningMovieBean.setTheater_name(rs.getString("theater_name"));
 				screeningMovieBean.setPrice(rs.getInt("price"));
 				screeningMovieBean.setScreening_date(rs.getTimestamp("screening_date"));
+				screeningMovieBean.setEnd_date(rs.getTimestamp("end_date"));
 				screeningMovieBeans.add(screeningMovieBean);
 			}
 		} catch(Exception ex) {
@@ -253,6 +254,7 @@ public class ScreeningMovieDB {
 				ScreeningMovieBean screeningMovieBean = new ScreeningMovieBean();
 				screeningMovieBean.setScreening_timetable_id(rs.getInt("screening_timetable_id"));
 				screeningMovieBean.setScreening_date(rs.getTimestamp("screening_date"));
+				screeningMovieBean.setEnd_date(rs.getTimestamp("end_date"));
 				screeningMovieBeans.add(screeningMovieBean);
 			}
 		} catch(Exception ex) {
@@ -269,6 +271,7 @@ public class ScreeningMovieDB {
 	public int insertScreeningMovie(ScreeningMovieBean screeningMovie) throws Exception {
 		Connection conn = null;
 		Statement stmt = null;
+		ResultSet rs = null;
 		int isCompleted = 0;
 		
 		try {
@@ -279,8 +282,27 @@ public class ScreeningMovieDB {
 			int theater_id = screeningMovie.getTheater_id();
 			int price = screeningMovie.getPrice();
 			Timestamp screening_date = screeningMovie.getScreening_date();
-			String sql = "INSERT INTO SCREENING_TIMETABLE (movie_id, theater_id, price, screening_date) "
-					+ "VALUES ('" + movie_id + "', '" + theater_id + "', '" + price + "', '" + screening_date + "')";
+			Timestamp end_date = screeningMovie.getEnd_date();
+			
+			String sql = "SELECT * FROM SCREENING_TIMETABLE "
+					+ "WHERE theater_id = '" + theater_id + "' AND DATE(screening_date) = DATE('" + screening_date + "') "
+					+ "AND movie_id != '" + movie_id + "'";
+			rs = stmt.executeQuery(sql);
+			if(rs.next()) { // 해당 날짜, 상영관에 다른 영화가 이미 상영중인 경우
+				return 2;
+			}
+			
+			sql = "SELECT * FROM SCREENING_TIMETABLE "
+					+ "WHERE theater_id = '" + theater_id + "' AND movie_id = '" + movie_id + "'"
+					+ "AND ('" + screening_date + "' BETWEEN screening_date AND end_date " + 
+					"OR screening_date BETWEEN '" + screening_date + "' AND '" + end_date + "')";
+			rs = stmt.executeQuery(sql);
+			if(rs.next()) { // 상영시간이 중복되는 경우
+				return 3;
+			}
+			
+			sql = "INSERT INTO SCREENING_TIMETABLE (movie_id, theater_id, price, screening_date, end_date) "
+					+ "VALUES ('" + movie_id + "', '" + theater_id + "', '" + price + "', '" + screening_date + "', '" + end_date + "')";
 			
 			isCompleted = stmt.executeUpdate(sql);
 			

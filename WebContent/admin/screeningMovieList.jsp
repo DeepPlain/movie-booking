@@ -24,7 +24,8 @@
 		<b>영화관</b>: <%=screeningMovieBeans.get(i).getMovie_theater_name() %> /
 		<b>상영관</b>: <%=screeningMovieBeans.get(i).getTheater_name() %> /
 		<b>가격</b>: <%=screeningMovieBeans.get(i).getPrice() %> / 
-		<b>시간</b>: <%=screeningMovieBeans.get(i).getScreening_date() %>
+		<b>시작 시간</b>: <%=screeningMovieBeans.get(i).getScreening_date() %>
+		<b>종료 시간</b>: <%=screeningMovieBeans.get(i).getEnd_date() %>
 
 		<form method="post" action="deleteScreeningMovieHandler.jsp" style="display: inline;">
 			<input type=text style="display: none;" name="screening_timetable_id" value="<%=screeningMovieBeans.get(i).getScreening_timetable_id() %>">
