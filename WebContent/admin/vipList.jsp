@@ -24,7 +24,7 @@
 	</br></br>
 <%
 	CustomerDB customerDB = CustomerDB.getInstance();
-	ArrayList<CustomerBean> customerBeans = customerDB.selectVIPList(Timestamp.valueOf(start_date + " 00:00:00"), Timestamp.valueOf(end_date + " 00:00:00"));
+	ArrayList<CustomerBean> customerBeans = customerDB.selectVIPList(Timestamp.valueOf(start_date + " 00:00:00"), Timestamp.valueOf(end_date + " 23:59:59"));
 	for(int i=0; i<customerBeans.size(); i++) {
 %>
 		No.<%=(i+1) %> <b>ID</b>: <%=customerBeans.get(i).getId() %> /

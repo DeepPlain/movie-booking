@@ -57,6 +57,8 @@ public class CustomerDB {
 			pstmt = conn.prepareStatement(
 					"SELECT *, COUNT(BOOKING.customer_id) AS booking_num "
 					+ "FROM BOOKING "
+					+ "LEFT JOIN BOOKED_SEAT "
+					+ "ON BOOKING.booking_id = BOOKED_SEAT.booking_id "
 					+ "LEFT JOIN CUSTOMER "
 					+ "ON BOOKING.customer_id = CUSTOMER.customer_id "
 					+ "WHERE ? < booking_date AND booking_date < ? "

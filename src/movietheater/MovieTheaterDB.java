@@ -24,8 +24,8 @@ public class MovieTheaterDB {
 			
 			pstmt = conn.prepareStatement(
 					"SELECT *,"
-					+ "(SELECT COUNT(*) FROM DBCLASS.THEATER WHERE THEATER.movie_theater_name = MOVIE_THEATER.movie_theater_name) AS theater_num, "
-					+ "(SELECT COUNT(*) FROM DBCLASS.SEAT WHERE theater_id in (SELECT theater_id FROM DBCLASS.THEATER WHERE THEATER.movie_theater_name = MOVIE_THEATER.movie_theater_name)) AS seat_num "
+					+ "(SELECT COUNT(*) FROM THEATER WHERE THEATER.movie_theater_name = MOVIE_THEATER.movie_theater_name) AS theater_num, "
+					+ "(SELECT COUNT(*) FROM SEAT WHERE theater_id in (SELECT theater_id FROM THEATER WHERE THEATER.movie_theater_name = MOVIE_THEATER.movie_theater_name)) AS seat_num "
 					+ "FROM MOVIE_THEATER");
 			rs = pstmt.executeQuery();
 			
@@ -60,12 +60,7 @@ public class MovieTheaterDB {
 			
 			pstmt = conn.prepareStatement(
 					"SELECT * FROM THEATER");
-			
-			// 상영관 1개 당 영화 1개 등록
-//			pstmt = conn.prepareStatement(
-//					"SELECT * FROM THEATER WHERE theater_id not in "
-//					+ "(SELECT theater_id FROM SCREENING_TIMETABLE)");
-//			
+						
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
