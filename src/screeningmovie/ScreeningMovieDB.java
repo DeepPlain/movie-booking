@@ -97,16 +97,17 @@ public class ScreeningMovieDB {
 			conn = DBConnection.getConnection();
 			
 			pstmt = conn.prepareStatement(
-					"(SELECT MOVIE.movie_id, title, COUNT(*) AS book_num, "
-					+ "COUNT(*) / (SELECT COUNT(*) FROM BOOKED_SEAT) AS book_rate "
-					+ "FROM BOOKING "
-					+ "LEFT JOIN BOOKED_SEAT "
-					+ "ON BOOKING.booking_id = BOOKED_SEAT.booking_id "
-					+ "LEFT JOIN SCREENING_TIMETABLE "
-					+ "ON BOOKING.screening_timetable_id = SCREENING_TIMETABLE.screening_timetable_id "
-					+ "LEFT JOIN MOVIE "
-					+ "ON SCREENING_TIMETABLE.movie_id = MOVIE.movie_id "
-					+ "GROUP BY SCREENING_TIMETABLE.movie_id) "
+					"SELECT *, "
+					+ "COUNT(booking_id) AS book_num, "
+					+ "IFNULL(COUNT(booking_id) / book_total_num, 0) AS book_rate "
+					+ "FROM "
+					+ "(SELECT *, "
+					+ "(SELECT COUNT(*) FROM BOOKED_SEAT) AS book_total_num "
+					+ "FROM SCREENING_TIMETABLE "
+					+ "NATURAL JOIN MOVIE) AS SUB "
+					+ "NATURAL LEFT JOIN BOOKING "
+					+ "NATURAL LEFT JOIN BOOKED_SEAT "
+					+ "GROUP BY movie_id "
 					+ "ORDER BY book_rate DESC");
 			rs = pstmt.executeQuery();
 			

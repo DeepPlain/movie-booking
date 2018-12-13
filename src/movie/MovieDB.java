@@ -150,7 +150,6 @@ public class MovieDB {
 			
 			if(actor != null) {				
 				for(int i=0; i<actor.length; i++) {
-					String sql = "INSERT INTO ACTOR VALUES ('" + movie_id + "', '" + actor[i] + "')";
 					pstmt = conn.prepareStatement(
 							"INSERT INTO ACTOR VALUES (?, ?)");
 					pstmt.setInt(1, movie_id);

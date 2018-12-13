@@ -25,7 +25,8 @@ public class MovieTheaterDB {
 			pstmt = conn.prepareStatement(
 					"SELECT *,"
 					+ "(SELECT COUNT(*) FROM THEATER WHERE THEATER.movie_theater_name = MOVIE_THEATER.movie_theater_name) AS theater_num, "
-					+ "(SELECT COUNT(*) FROM SEAT WHERE theater_id in (SELECT theater_id FROM THEATER WHERE THEATER.movie_theater_name = MOVIE_THEATER.movie_theater_name)) AS seat_num "
+					+ "(SELECT COUNT(*) FROM SEAT WHERE theater_id in "
+					+ "(SELECT theater_id FROM THEATER WHERE THEATER.movie_theater_name = MOVIE_THEATER.movie_theater_name)) AS seat_num "
 					+ "FROM MOVIE_THEATER");
 			rs = pstmt.executeQuery();
 			

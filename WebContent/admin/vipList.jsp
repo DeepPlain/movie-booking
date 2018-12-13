@@ -33,7 +33,7 @@
 		<b>주소</b>: <%=customerBeans.get(i).getAddress() %> /
 		<b>전화번호</b>: <%=customerBeans.get(i).getPhone_number() %> /
 		<b>포인트</b>: <%=customerBeans.get(i).getPoint() %> /
-		<b>예매 횟수</b>: <%=customerBeans.get(i).getBooking_num() %>
+		<b>구매 횟수</b>: <%=customerBeans.get(i).getBooking_num() %>
 		<br/><br/>
 <%
 	}

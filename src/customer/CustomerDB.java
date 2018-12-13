@@ -55,10 +55,12 @@ public class CustomerDB {
 			conn = DBConnection.getConnection();
 			
 			pstmt = conn.prepareStatement(
-					"SELECT *, COUNT(BOOKING.customer_id) AS booking_num "
-					+ "FROM BOOKING "
+					"SELECT *, CUSTOMER.point AS customer_point, COUNT(BOOKING.customer_id) AS booking_num "
+					+ "FROM PAYMENT "
 					+ "LEFT JOIN BOOKED_SEAT "
-					+ "ON BOOKING.booking_id = BOOKED_SEAT.booking_id "
+					+ "ON PAYMENT.booking_id = BOOKED_SEAT.booking_id "
+					+ "LEFT JOIN BOOKING "
+					+ "ON PAYMENT.booking_id = BOOKING.booking_id "
 					+ "LEFT JOIN CUSTOMER "
 					+ "ON BOOKING.customer_id = CUSTOMER.customer_id "
 					+ "WHERE ? < booking_date AND booking_date < ? "
@@ -75,7 +77,7 @@ public class CustomerDB {
 				customerBean.setDate_of_birth(rs.getTimestamp("date_of_birth"));
 				customerBean.setAddress(rs.getString("address"));
 				customerBean.setPhone_number(rs.getString("phone_number"));
-				customerBean.setPoint(rs.getInt("point"));
+				customerBean.setPoint(rs.getInt("customer_point"));
 				customerBean.setBooking_num(rs.getInt("booking_num"));
 				customerBeans.add(customerBean);
 			}
