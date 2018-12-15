@@ -62,7 +62,8 @@ public class ScreeningMovieDB {
 			pstmt = conn.prepareStatement(
 					"SELECT * FROM SCREENING_TIMETABLE "
 					+ "LEFT JOIN MOVIE ON SCREENING_TIMETABLE.movie_id = MOVIE.movie_id "
-					+ "LEFT JOIN THEATER ON SCREENING_TIMETABLE.theater_id = THEATER.theater_id");
+					+ "LEFT JOIN THEATER ON SCREENING_TIMETABLE.theater_id = THEATER.theater_id "
+					+ "ORDER BY screening_date DESC");
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -173,7 +174,8 @@ public class ScreeningMovieDB {
 			pstmt = conn.prepareStatement(
 					"SELECT DATE(screening_date) AS screening_date FROM SCREENING_TIMETABLE "
 					+ "WHERE movie_id = ? AND "
-					+ "theater_id in (SELECT theater_id FROM THEATER WHERE movie_theater_name = ?)"
+					+ "theater_id in (SELECT theater_id FROM THEATER WHERE movie_theater_name = ?) AND "
+					+ "screening_date > now() "
 					+ "GROUP BY DATE(screening_date)");
 			pstmt.setInt(1, movie_id);
 			pstmt.setString(2, movie_theater_name);
@@ -245,7 +247,8 @@ public class ScreeningMovieDB {
 			
 			pstmt = conn.prepareStatement(
 					"SELECT * FROM SCREENING_TIMETABLE "
-					+ "WHERE movie_id = ? AND DATE(screening_date) = DATE(?) AND theater_id = ?");
+					+ "WHERE movie_id = ? AND DATE(screening_date) = DATE(?) AND theater_id = ? "
+					+ "AND screening_date > now()");
 			pstmt.setInt(1, movie_id);
 			pstmt.setTimestamp(2, screening_date);
 			pstmt.setInt(3, theater_id);
